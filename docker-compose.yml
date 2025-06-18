@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "8000:8000"
+  indicator_engine:
+    build: ./indicator_engine
+    ports:
+      - "8001:8000"
+  strategy_engine:
+    build: ./strategy_engine
+    ports:
+      - "8002:8000"
+  trade_executor:
+    build: ./trade_executor
+    ports:
+      - "8003:8000"
+  market_data:
+    build: ./market_data
+    ports:
+      - "8004:8000"
+  backtester:
+    build: ./backtester
+    ports:
+      - "8005:8000"
