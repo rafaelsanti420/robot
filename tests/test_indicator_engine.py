@@ -16,3 +16,10 @@ def test_rsi():
     response = client.post("/rsi", json=data)
     assert response.status_code == 200
     assert "rsi" in response.json()
+
+
+def test_ema():
+    data = {"prices": [1,2,3,4,5,6], "period": 3}
+    response = client.post("/ema", json=data)
+    assert response.status_code == 200
+    assert "ema" in response.json()
