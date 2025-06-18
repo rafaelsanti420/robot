@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Robot UI</title>
+</head>
+<body>
+    <h1>Robot Services</h1>
+    <ul id="services">Loading...</ul>
+    <script>
+        fetch('/services')
+            .then(r => r.json())
+            .then(data => {
+                const ul = document.getElementById('services');
+                ul.innerHTML = '';
+                Object.entries(data).forEach(([name, message]) => {
+                    const li = document.createElement('li');
+                    li.textContent = name + ': ' + message;
+                    ul.appendChild(li);
+                });
+            })
+            .catch(() => {
+                document.getElementById('services').textContent = 'Failed to load';
+            });
+    </script>
+</body>
+</html>

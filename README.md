@@ -18,3 +18,5 @@ Build and run all services:
 ```bash
 docker compose up --build
 ```
+
+The UI will be available at [http://localhost:8000/ui](http://localhost:8000/ui) once all services start.
