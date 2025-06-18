@@ -17,6 +17,18 @@ class EMARequest(BaseModel):
     prices: List[float]
     period: int
 
+
+class MACDRequest(BaseModel):
+    prices: List[float]
+    fast: int = 12
+    slow: int = 26
+    signal: int = 9
+
+
+class CustomRequest(BaseModel):
+    prices: List[float]
+    expression: str
+
 @app.get("/")
 async def root():
     return {"message": "indicator_engine"}
@@ -63,3 +75,31 @@ async def exponential_moving_average(req: EMARequest):
     for price in prices[req.period:]:
         ema = price * k + ema * (1 - k)
     return {"ema": ema}
+
+
+@app.post("/macd")
+async def macd(req: MACDRequest):
+    if req.slow <= req.fast or req.slow > len(req.prices):
+        return {"error": "invalid params"}
+
+    def ema(data, period):
+        k = 2 / (period + 1)
+        ema_val = sum(data[:period]) / period
+        for price in data[period:]:
+            ema_val = price * k + ema_val * (1 - k)
+        return ema_val
+
+    fast_val = ema(req.prices, req.fast)
+    slow_val = ema(req.prices, req.slow)
+    macd_line = fast_val - slow_val
+    signal_line = ema(req.prices[-req.signal - 1 :], req.signal)
+    return {"macd": macd_line, "signal": signal_line}
+
+
+@app.post("/custom")
+async def custom_indicator(req: CustomRequest):
+    try:
+        value = eval(req.expression, {"__builtins__": {}}, {"prices": req.prices})
+    except Exception as e:
+        return {"error": str(e)}
+    return {"value": value}

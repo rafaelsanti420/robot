@@ -21,8 +21,10 @@ async def root():
 
 @app.post("/strategy")
 async def create_strategy(strategy: Strategy):
-    strategies[strategy.name] = strategy.dict()
-    return {"status": "created", "strategy": strategy}
+    data = strategy.dict()
+    data["enabled"] = False
+    strategies[strategy.name] = data
+    return {"status": "created", "strategy": data}
 
 @app.get("/strategy/{name}")
 async def get_strategy(name: str):
@@ -35,3 +37,29 @@ async def get_strategy(name: str):
 @app.get("/strategies")
 async def list_strategies():
     return {"strategies": list(strategies.values())}
+
+
+@app.delete("/strategy/{name}")
+async def delete_strategy(name: str):
+    if name in strategies:
+        del strategies[name]
+        return {"status": "deleted"}
+    return {"error": "not found"}
+
+
+@app.post("/strategy/{name}/enable")
+async def enable_strategy(name: str):
+    s = strategies.get(name)
+    if not s:
+        return {"error": "not found"}
+    s["enabled"] = True
+    return {"status": "enabled"}
+
+
+@app.post("/strategy/{name}/disable")
+async def disable_strategy(name: str):
+    s = strategies.get(name)
+    if not s:
+        return {"error": "not found"}
+    s["enabled"] = False
+    return {"status": "disabled"}
