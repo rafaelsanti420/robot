@@ -1,11 +1,14 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 import httpx
 
 app = FastAPI(title="API Gateway")
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+BASE_DIR = Path(__file__).resolve().parent
+
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
 @app.get("/")
 async def read_root():
@@ -13,7 +16,7 @@ async def read_root():
 
 @app.get("/ui")
 async def ui():
-    return FileResponse("app/static/index.html")
+    return FileResponse(BASE_DIR / "static" / "index.html")
 
 @app.get("/services")
 async def service_status():
