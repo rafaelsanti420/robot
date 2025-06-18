@@ -29,3 +29,7 @@ docker compose up --build
 ```
 
 After startup open [http://localhost:8000/ui](http://localhost:8000/ui) to access the web UI.
+
+## Documentation
+
+For a detailed list of recommended API routes for each service see [docs/FULL_METHODS.md](docs/FULL_METHODS.md).
