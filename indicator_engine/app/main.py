@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 
+
 app = FastAPI(title="indicator_engine")
 
 class MARequest(BaseModel):
@@ -9,6 +10,10 @@ class MARequest(BaseModel):
     period: int
 
 class RSIRequest(BaseModel):
+    prices: List[float]
+    period: int
+
+class EMARequest(BaseModel):
     prices: List[float]
     period: int
 
@@ -46,3 +51,15 @@ async def relative_strength_index(req: RSIRequest):
         rs = avg_gain / avg_loss
         rsi = 100 - (100 / (1 + rs))
     return {"rsi": rsi}
+
+
+@app.post("/ema")
+async def exponential_moving_average(req: EMARequest):
+    if req.period <= 0 or req.period > len(req.prices):
+        return {"error": "invalid period"}
+    prices = req.prices
+    k = 2 / (req.period + 1)
+    ema = sum(prices[:req.period]) / req.period
+    for price in prices[req.period:]:
+        ema = price * k + ema * (1 - k)
+    return {"ema": ema}

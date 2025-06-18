@@ -14,6 +14,13 @@ This repository implements a small example of the trading robot described in the
 
 - `POST /ma` – calculate a simple moving average.
 - `POST /rsi` – calculate the relative strength index.
+- `POST /ema` – calculate the exponential moving average.
+
+### Strategy Engine Endpoints
+
+- `POST /strategy` – create a new strategy.
+- `GET /strategy/{name}` – fetch a strategy by name.
+- `GET /strategies` – list all stored strategies.
 
 ## Running with Docker Compose
 

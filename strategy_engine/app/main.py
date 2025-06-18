@@ -30,3 +30,8 @@ async def get_strategy(name: str):
     if not s:
         return {"error": "not found"}
     return s
+
+
+@app.get("/strategies")
+async def list_strategies():
+    return {"strategies": list(strategies.values())}
