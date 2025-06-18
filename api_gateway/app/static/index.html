@@ -7,6 +7,13 @@
 <body>
     <h1>Robot Services</h1>
     <ul id="services">Loading...</ul>
+
+    <h2>Market Data</h2>
+    <button onclick="loadCandles()">Load Candles</button>
+    <pre id="candles"></pre>
+
+    <h2>Trade Executor</h2>
+    <label>Active: <input type="checkbox" id="toggle" onchange="setActive()"></label>
     <script>
         fetch('/services')
             .then(r => r.json())
@@ -22,6 +29,23 @@
             .catch(() => {
                 document.getElementById('services').textContent = 'Failed to load';
             });
+
+        function loadCandles() {
+            fetch('http://market_data:8000/candles')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('candles').textContent = JSON.stringify(data, null, 2);
+                });
+        }
+
+        function setActive() {
+            const active = document.getElementById('toggle').checked;
+            fetch('http://trade_executor:8000/toggle', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({active})
+            });
+        }
     </script>
 </body>
 </html>

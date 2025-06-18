@@ -1,22 +1,19 @@
 # Robot Platform
 
-This repository contains a minimal skeleton for the trading platform described in the technical specification. Each service is implemented as a small FastAPI application.
+This repository implements a small example of the trading robot described in the technical specification. Each component is a FastAPI microservice and all services can be started with Docker Compose.
 
 ## Services
-
-- `api-gateway`
-- `indicator-engine`
-- `strategy-engine`
-- `trade-executor`
-- `market-data`
-- `backtester`
+- **api-gateway** – exposes the UI and provides a central entry point to other services
+- **indicator-engine** – calculates trading indicators (e.g. moving average)
+- **strategy-engine** – stores simple strategies composed of weighted indicators
+- **trade-executor** – mock order execution with an on/off toggle
+- **market-data** – provides mocked market data using a Bybit connector
+- **backtester** – runs a very basic backtest using market data
 
 ## Running with Docker Compose
-
-Build and run all services:
 
 ```bash
 docker compose up --build
 ```
 
-The UI will be available at [http://localhost:8000/ui](http://localhost:8000/ui) once all services start.
+After startup open [http://localhost:8000/ui](http://localhost:8000/ui) to access the web UI.
